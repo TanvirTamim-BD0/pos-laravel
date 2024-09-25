@@ -1,0 +1,144 @@
+@extends('backend.master')
+@section('content')
+@section('title') Sell Return @endsection
+@section('sell-return') active @endsection
+@section('sell-return.create') active @endsection
+@section('styles')
+@endsection
+@section('content')
+
+	<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Toolbar-->
+    <div class="toolbar" id="kt_toolbar">
+        <!--begin::Container-->
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Title-->
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Sell Return</h1>
+                <!--end::Title-->
+                <!--begin::Separator-->
+                <span class="h-20px border-gray-300 border-start mx-4"></span>
+                <!--end::Separator-->
+                <!--begin::Breadcrumb-->
+                <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">
+                        <a href="/metronic8/demo1/../demo1/index.html" class="text-muted text-hover-primary">Home</a>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                    </li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item text-muted">Sell Return</li>
+                    <!--end::Item-->
+                    <!--begin::Item-->
+                    <li class="breadcrumb-item">
+                        <span class="bullet bg-gray-300 w-5px h-2px"></span>
+                    </li>
+
+                </ul>
+                <!--end::Breadcrumb-->
+            </div>
+            <!--end::Page title-->
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Post-->
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+        <div id="kt_content_container" class="container-xxl">
+
+            <div class="card">
+
+                <div class="card-body pt-0 mt-10">
+
+                    <h3>Sell Return</h3><br>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-5">
+                                    <select class="form-control" name="selling_id" id="sellingID" data-control="select2" 
+									data-placeholder="Select Invoice" required>
+                                        <option selected disabled>Select Invoice</option>
+                                        @foreach($sells as $sell)
+                                            <option value="{{ $sell->id }}">{{ $sell->selling_id }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a onclick="searchProduct()" class="btn text-white"
+                                    style="background-color: #2F4F4F">Search</a>
+                            
+                            </div>
+
+
+                        </div>
+
+                   
+                </div>
+
+            </div>
+
+
+            <div id="productsellBlock" style="margin-top: 30px;">
+            	
+            </div>
+
+
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Post-->
+</div>
+
+<script>
+
+	function searchProduct(){
+		var sellingID = $("#sellingID").val();
+
+		var url = "{{ route('sellReturn.product-list') }}";
+        if(sellingID != null){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: {
+                    sellingID: sellingID,
+                },
+                success: function (data) {
+                    if(data.error){
+                        alert(data.error);
+                        $("#productsellBlock").html();
+                    }else{
+                        $("#productsellBlock").html(data);
+                    }
+                }
+            });
+        }else{
+            alert('At First Select Invoice');
+        }
+	}
+
+</script>
+	
+
+@endsection
